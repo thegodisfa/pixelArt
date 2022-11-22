@@ -57,6 +57,49 @@ function handleApplyColor() {
     })
 
 }
+
+function automaticDrawing(){
+    document.querySelectorAll('td')[0].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[9].style.backgroundColor = 'red';    
+    document.querySelectorAll('td')[11].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[18].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[22].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[27].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[33].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[36].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[44].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[45].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[54].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[55].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[63].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[66].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[72].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[77].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[81].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[88].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[90].style.backgroundColor = 'red';
+    document.querySelectorAll('td')[99].style.backgroundColor = 'red';
+
+    document.querySelectorAll('td')[4].style.backgroundColor = 'green';
+    document.querySelectorAll('td')[14].style.backgroundColor = 'green';
+    document.querySelectorAll('td')[24].style.backgroundColor = 'green';
+    document.querySelectorAll('td')[34].style.backgroundColor = 'green';
+    document.querySelectorAll('td')[64].style.backgroundColor = 'green';
+    document.querySelectorAll('td')[74].style.backgroundColor = 'green';
+    document.querySelectorAll('td')[84].style.backgroundColor = 'green';
+    document.querySelectorAll('td')[94].style.backgroundColor = 'green';
+
+    document.querySelectorAll('td')[5].style.backgroundColor = 'blue';
+    document.querySelectorAll('td')[15].style.backgroundColor = 'blue';
+    document.querySelectorAll('td')[25].style.backgroundColor = 'blue';
+    document.querySelectorAll('td')[35].style.backgroundColor = 'blue';
+    document.querySelectorAll('td')[65].style.backgroundColor = 'blue';
+    document.querySelectorAll('td')[75].style.backgroundColor = 'blue';
+    document.querySelectorAll('td')[85].style.backgroundColor = 'blue';
+    document.querySelectorAll('td')[95].style.backgroundColor = 'blue';
+
+}
+
 displayListColor(listColor)
 drawingTable(height, width)
 handleApplyColor()
