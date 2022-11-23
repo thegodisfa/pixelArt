@@ -10,3 +10,9 @@
     width: 100px;
     height: 100px;
 }
+.bomb {
+    background-color: white !important;
+}
+.red{
+    background-color: red !important;
+}

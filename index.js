@@ -11,6 +11,7 @@ listColor = [
 let table = getEle('drawingTable')
 let colorTable = getEle('colorTable')
 let chosingColor = getEle('chosingColor')
+let totalBomb = getEle('totalBomb')
 let height = 10;
 let width = 10;
 
@@ -23,16 +24,33 @@ function clearRows() {
 
 function drawingTable(height, width) {
     clearRows()
+    totalBombs = 0;
     for (let i = 1; i <= height; i++) {
         const row = document.createElement('tr')
         for (let j = 1; j <= width; j++) {
+            let randomNumber = Math.floor(Math.random() * 2);
+            if(randomNumber == 1){
+                totalBombs += 1; 
+            }
             const column = document.createElement('td')
             column.classList.add('pixel')
+            column.classList.add(randomNumber)
             row.appendChild(column)
         }
         row.classList.add('pixel')
         table.append(row)
     }
+    totalBomb.innerHTML = totalBombs
+    table.addEventListener('click',function(e){
+        console.log(e.target.nextElementSibling)
+        console.log(e.path[0].classList[1])
+        if(e.path[0].classList[1] == 0){
+            e.path[0].classList.add('red');
+        }else if(e.path[0].classList[1] == 1){
+            e.path[0].classList.add('bomb');
+            alert('you lose');
+        }
+    })  
 }
 
 function displayListColor(listColor) {
