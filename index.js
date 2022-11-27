@@ -8,12 +8,16 @@ listColor = [
     'yellow',
     'pink'
 ]
-let table = getEle('drawingTable')
+let table = document.querySelector('.drawingTable')
+let lose = document.querySelector('.lose')
+let totalLose = 0
+let totalWin = 0
 let colorTable = getEle('colorTable')
 let chosingColor = getEle('chosingColor')
 let totalBomb = getEle('totalBomb')
-let height = 10;
-let width = 10;
+let totalBombNextToPixel = 0
+size = 10
+
 
 function clearRows() {
     const allRows = document.querySelectorAll('tr');
@@ -22,37 +26,148 @@ function clearRows() {
     });
 }
 
-function drawingTable(height, width) {
+function drawingTable(size) {
     clearRows()
+    boardGame = []
+    arrayBomb = []
     totalBombs = 0;
-    for (let i = 1; i <= height; i++) {
-        const row = document.createElement('tr')
-        for (let j = 1; j <= width; j++) {
-            let randomNumber = Math.floor(Math.random() * 2);
-            if(randomNumber == 1){
-                totalBombs += 1; 
+    for (let i = 0; i < size; i++) {
+        const row = []
+        for (let j = 0; j < size; j++) {
+            const column = document.createElement('div')
+            column.dataset.status = 'hidden'
+            column.dataset.line = i;
+            column.dataset.column = j;
+            column.dataset.setBoom = false
+            column.dataset.value = 0
+            pixel = {
+                i,
+                j,
+                column,
             }
-            const column = document.createElement('td')
-            column.classList.add('pixel')
-            column.classList.add(randomNumber)
-            row.appendChild(column)
+            row.push(pixel)
         }
-        row.classList.add('pixel')
-        table.append(row)
+        boardGame.push(row)
     }
-    totalBomb.innerHTML = totalBombs
-    table.addEventListener('click',function(e){
-        console.log(e.target.nextElementSibling)
-        console.log(e.path[0].classList[1])
-        if(e.path[0].classList[1] == 0){
-            e.path[0].classList.add('red');
-        }else if(e.path[0].classList[1] == 1){
-            e.path[0].classList.add('bomb');
-            alert('you lose');
-        }
-    })  
+    displayBomb()
+    table.style.setProperty('--size', size)
+    boardGame.forEach(row => {
+        row.forEach(pixel => {
+            table.append(pixel.column)
+        })
+    })
+    
+    displayGame()
 }
 
+function displayGame(){
+    table.addEventListener('click',function(e){
+        if(e.target.dataset.setBoom === false && e.target.dataset.value === 0){
+            e.target.dataset.status = 'marked'
+        }else if(e.target.dataset.setBoom === true){
+            alert('you lose')
+        }else if(e.target.dataset.value != 0){
+            e.target.dataset.status = 'number'
+            e.target.innerHTML = e.target.dataset.value
+        }
+    })
+}
+
+function displayBomb() {
+    for (let i = 0; i < 10; i++) {
+        bomb = {
+            i: Math.floor(Math.random() * 10),
+            j: Math.floor(Math.random() * 10),
+        }
+        arrayBomb.push(bomb)
+    }
+    arrayBomb.forEach(bomb => {
+        const boom = boardGame[bomb.i][bomb.j]
+        boom.column.dataset.setBoom = true
+        getTopPixel(bomb.i, bomb.j, boardGame)
+        getRightPixel(bomb.i, bomb.j, boardGame)
+        getLeftPixel(bomb.i, bomb.j, boardGame)
+        getBottomPixel(bomb.i, bomb.j, boardGame)
+        getTopRightPixel(bomb.i, bomb.j, boardGame)
+        getTopLeftPixel(bomb.i, bomb.j, boardGame)
+        getBottomRightPixel(bomb.i, bomb.j, boardGame)
+        getBottomLeftPixel(bomb.i, bomb.j, boardGame)
+    })
+}
+
+function getTopPixel(i, j, boardGame) {
+    console.log(boardGame[i][j])
+    if (i > 0) {
+        const topPosition = boardGame[i - 1][j]
+        if(boardGame[i][j] != topPosition){
+            topPosition.column.dataset.value = Number(topPosition.column.dataset.value) + 1
+        }
+        return topPosition
+    }
+}
+function getRightPixel(i, j, boardGame) {
+    if (j < 9) {
+        const rightPosition = boardGame[i][j + 1]
+        if(boardGame[i][j] != rightPosition){
+            rightPosition.column.dataset.value = Number(rightPosition.column.dataset.value) + 1
+        }
+        return rightPosition
+    }
+}
+function getLeftPixel(i, j, boardGame) {
+    if (j > 0) {
+        const leftPosition = boardGame[i][j - 1]
+        if(boardGame[i][j] != leftPosition){
+            leftPosition.column.dataset.value = Number(leftPosition.column.dataset.value) + 1
+        }
+        return leftPosition
+    }
+}
+function getBottomPixel(i, j, boardGame) {
+    if (i < 9) {
+        const bottomPosition = boardGame[i + 1][j]
+        if(boardGame[i][j] != bottomPosition){
+            bottomPosition.column.dataset.value = Number(bottomPosition.column.dataset.value) + 1
+        }
+        return bottomPosition
+    }
+}
+function getTopRightPixel(i, j, boardGame) {
+    if (i > 0 && j < 9) {
+        const topRightPixel = boardGame[i - 1][j + 1]
+        if(boardGame[i][j] != topRightPixel){
+            topRightPixel.column.dataset.value = Number(topRightPixel.column.dataset.value) + 1
+        }
+        return topRightPixel
+    }
+}
+function getTopLeftPixel(i, j, boardGame) {
+    if (i > 0 && j > 0) {
+        const topLeftPixel = boardGame[i - 1][j - 1]
+        if(boardGame[i][j] != topLeftPixel){
+            topLeftPixel.column.dataset.value = Number(topLeftPixel.column.dataset.value) + 1
+        }
+        return topLeftPixel
+    }
+}
+function getBottomRightPixel(i, j, boardGame) {
+    if (i < 9 && j < 9) {
+        const bottomRightPixel = boardGame[i + 1][j + 1]
+        if(boardGame[i][j] != bottomRightPixel){
+            bottomRightPixel.column.dataset.value = Number(bottomRightPixel.column.dataset.value) + 1
+        }
+        return bottomRightPixel
+    }
+}
+function getBottomLeftPixel(i, j, boardGame) {
+    if (i < 9 && j > 0) {
+        const bottomLeftPixel = boardGame[i + 1][j - 1]
+        if(boardGame[i][j] != bottomLeftPixel){
+            bottomLeftPixel.column.dataset.value = Number(bottomLeftPixel.column.dataset.value) + 1
+        }
+        return bottomLeftPixel
+    }
+}
 function displayListColor(listColor) {
     for (let i = 0; i < listColor.length; i++) {
         const colorPixel = document.createElement('div')
@@ -61,8 +176,6 @@ function displayListColor(listColor) {
         colorTable.appendChild(colorPixel)
     }
 }
-
-
 function handleApplyColor() {
     colorPicked = 'rgb(61, 61, 61)'
     colorTable.addEventListener('click', function (e) {
@@ -75,10 +188,9 @@ function handleApplyColor() {
     })
 
 }
-
-function automaticChangingDrawing(){
+function automaticChangingDrawing() {
     $('td')[0].style.backgroundColor = 'green';
-    $('td')[9].style.backgroundColor = 'green';    
+    $('td')[9].style.backgroundColor = 'green';
     $('td')[11].style.backgroundColor = 'green';
     $('td')[18].style.backgroundColor = 'green';
     $('td')[22].style.backgroundColor = 'green';
@@ -117,9 +229,9 @@ function automaticChangingDrawing(){
     $('td')[95].style.backgroundColor = 'red';
 
 }
-function automaticDrawing(){
+function automaticDrawing() {
     document.querySelectorAll('td')[0].style.backgroundColor = 'red';
-    document.querySelectorAll('td')[9].style.backgroundColor = 'red';    
+    document.querySelectorAll('td')[9].style.backgroundColor = 'red';
     document.querySelectorAll('td')[11].style.backgroundColor = 'red';
     document.querySelectorAll('td')[18].style.backgroundColor = 'red';
     document.querySelectorAll('td')[22].style.backgroundColor = 'red';
@@ -158,9 +270,9 @@ function automaticDrawing(){
     document.querySelectorAll('td')[95].style.backgroundColor = 'blue';
 
 }
-function animationTransition(){
+function animationTransition() {
     $('td')[0].style.transition = 'all .5s';
-    $('td')[9].style.transition = 'all .5s';    
+    $('td')[9].style.transition = 'all .5s';
     $('td')[11].style.transition = 'all .5s';
     $('td')[18].style.transition = 'all .5s';
     $('td')[22].style.transition = 'all .5s';
@@ -198,15 +310,13 @@ function animationTransition(){
     $('td')[85].style.transition = 'all .5s';
     $('td')[95].style.transition = 'all .5s';
 }
-
-function animationDrawing(){
+function animationDrawing() {
     automaticDrawing()
     animationTransition()
-    setTimeout(()=>{automaticChangingDrawing()},1000)
-    setTimeout(()=>{automaticDrawing()},2000)
-    setTimeout(()=>{animationTransition()},2000)
+    setTimeout(() => { automaticChangingDrawing() }, 1000)
+    setTimeout(() => { automaticDrawing() }, 2000)
+    setTimeout(() => { animationTransition() }, 2000)
 }
-
 displayListColor(listColor)
-drawingTable(height, width)
+drawingTable(size)
 handleApplyColor()
